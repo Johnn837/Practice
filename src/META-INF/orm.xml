@@ -9,9 +9,9 @@
    		TODO:
    		- Define a valid JPQL query to fetch all Complaint details where the dateOfIncidence is between the two given dates
   	 -->
-  	 
-  	 
-  	 
+  	 <named-query name = "getComplaintDetailsByDate">
+	 	<query>select k from ComplaintEntity k where k.dateOfIncidence between ?1 and ?2</query>
+	 </named-query>
   	 
   	 <!--
   	 This JPQL query fetches the Complaint details where the customerName and the complaintTypeId is matching to the given values

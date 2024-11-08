@@ -48,9 +48,18 @@ public class ComplaintRegisterController {
      * @return ModelAndView object with appropriate view and message based on form processing.
      * @throws Exception if there is an error during complaint registration.
      */
+    @RequestMapping(value = "/complaintForm")
 	public ModelAndView processComplaintForm(@ModelAttribute("complaintBean") @Valid ComplaintBean complaintBean,BindingResult result) throws Exception {
 		 // Your implementation goes here
-        return null;
+        ModelAndView mv = new ModelAndView();
+        if(result.hasErrors()){
+          mv.setViewName("ComplaintPage");
+          return mv;
+        }
+        int id = complaintService.registerComplaintDetails(complaintBean);
+        mv.setViewName("Success");
+        mv.addObject("message", "Hi " + complaintBean.getCustomerName() + " gandu");
+        return mv;
 	}
 
 	/**
@@ -62,9 +71,10 @@ public class ComplaintRegisterController {
      *
      * @return Map<Integer, String> containing complaint type IDs mapped to their names.
      */
+    @ModelAttribute("complaintTypes")
 	public Map<Integer, String> getAllComplaintTypes() {
 		 // Your implementation goes here
-        return null;
+        return complaintService.getAllComplaintTypes();
 	}
 
 	/**
@@ -79,8 +89,12 @@ public class ComplaintRegisterController {
      * @param exception The exception to handle.
      * @return ModelAndView object for displaying exception details.
      */
+    @ExceptionHandler(value = Exception.class)
 	public ModelAndView handleAllExceptions(Exception exception) {
 		 // Your implementation goes here
-        return null;
+           ModelAndView modelAndView = new ModelAndView();
+           modelAndView.addObject("MESSAGE", exception.getMessage());
+           modelAndView.setViewName("GeneralizedExceptionHandlerPage");
+           return modelAndView;
 	}
 }

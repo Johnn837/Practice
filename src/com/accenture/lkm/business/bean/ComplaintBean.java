@@ -22,9 +22,9 @@ public class ComplaintBean {
 	@NotBlank(message = "You need to enter the value")
 	private String customerName;
 	private String description;
-	@Past(message = "to be in past")
-	@
 	@NotNull(message = "You need to enter the value")
+	@Past(message = "to be in past")
+	@DateTimeFormat(pattern = "dd-MMM-yyyy")
 	private Date dateOfIncidence;
 	@NotNull(message = "You need to enter the value")
 	private Double amount;

@@ -45,7 +45,15 @@ public class ComplaintDaoWrapper {
      */
 	public int registerComplaintDetails(ComplaintBean complaintBean) {
 		// Your implementation goes here
-		return 0;
+		ComplaintEntity compEnt = convertBeantoEntity(complaintBean);
+          complaintDao.save(compEnt);
+          return compEnt.getComplaintId();
+    }
+
+    private ComplaintEntity convertBeantoEntity(ComplaintBean compBean){
+          ComplaintEntity bean = new ComplaintEntity();
+          BeanUtils.copyProperties(compBean, bean);
+          return bean;
     }
 
 	/**
@@ -66,8 +74,28 @@ public class ComplaintDaoWrapper {
 	
 	public List<ComplaintBean> getComplaintDetailsByDate(Date fromDate, Date toDate) {
 		// Your implementation goes here
-        return null;
+          List<ComplaintBean> BeanList = new ArrayList<>();
+          try{
+               Query query = manager.createQuery("select k from ComplaintEntity k where k.dateOfIncidence between ?1 and ?2");
+               query.setParameter(1, fromDate);
+               query.setParameter(2, toDate);
+               List<ComplaintEntity> beanList = query.getResultList();
+               for(ComplaintEntity ent : beanList){
+                    ComplaintBean compBean = convertEntitytoBean(ent);
+                    BeanList.add(compBean);
+               }
+          }
+          catch(Exception e){
+               e.getMessage();
+          }
+          return BeanList;
 	}
+     
+     private CompliantBean convertEntitytoBean(ComplaintEntity compEnt){
+          ComplaintBean bean = new ComplaintBean();
+          BeanUtils.copyProperties(compEnt, bean);
+          return bean;
+     } 
 
 	/**
      * To-Do Item 1.5: This method should Retrieve all complaint types.
@@ -82,8 +110,20 @@ public class ComplaintDaoWrapper {
      */
 	public List<ComplaintTypeBean> getAllComplaintTypes() {
 		// Your implementation goes here
-        return null;
+          List<ComplaintTypeEntity> compEntBean = complaintTypeDao.findAll();
+          List<ComplaintTypeBean> compTypeBean = new ArrayList<>();
+        for(ComplaintTypeEntity compEntBe : compEntBean){
+               ComplaintTypeBean comBean = convertComplaintTypeBeantoEntity(compEntBe);
+               compTypeBean.add(comBean);
+        }
+        return compEntBean;
 	}
+
+     private ComplaintTypeBean convertComplaintTypeBeantoEntity(ComplaintTypeEntity compBean){
+          ComplaintTypeBean bean = new ComplaintTypeBean();
+          BeanUtils.copyProperties(compBean, bean);
+          return bean;
+    }
 
 	/**
      * This method should Check if a customer has a complaint of a specific type.

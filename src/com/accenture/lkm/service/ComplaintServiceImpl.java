@@ -32,7 +32,11 @@ public class ComplaintServiceImpl implements ComplaintService {
      */
 	public int registerComplaintDetails(ComplaintBean complaintBean) throws Exception {
 		// Your implementation goes here
-		return 0;
+		int count = complaintDaoWrapper.getCustomerByComplaintType(complaintBean.getCustomerName(), complaintBean.getComplaintTypeId());
+          if(count == 1){
+               throw new Exception("Already the complaint is submitted");
+          }
+          return complaintDaoWrapper.registerComplaintDetails(complaintBean);
 	}
 
 	/**
@@ -48,7 +52,7 @@ public class ComplaintServiceImpl implements ComplaintService {
 	@Override
 	public List<ComplaintBean> getComplaintDetailsByDate(Date fromDate, Date toDate) {
 		// Your implementation goes here
-		return null;
+		return complaintDaoWrapper.getComplaintDetailsByDate(fromDate, toDate);
 	}
 
 	/**
@@ -63,6 +67,16 @@ public class ComplaintServiceImpl implements ComplaintService {
 	@Override
 	public Map<Integer, String> getAllComplaintTypes() {
 		// Your implementation goes here
-		return null;
+          Map<Integer, String> mappy = new HashMap<>();
+		List<ComplaintTypeBean> beanList = complaintDaoWrapper.getAllComplaintTypes();
+          try{
+               for(ComplaintTypeBean bean : beanList){
+                    mappy.put(bean.getComplaintTypeId(), bean.getComplaintTypeName());
+               }
+          }
+          catch(Exception e){
+               e.getMessage();
+          }
+          return mappy;
 	}
 }

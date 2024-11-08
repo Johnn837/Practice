@@ -14,7 +14,8 @@ To-Do Item 1.2: Define a custom repository for managing ComplaintTypes.
 	--Use custom repository.
 	--Add a method to get all ComplaintTypes details from the database.
 */
+@RepositoryDefinition(idClass = Integer.class, domainClass = ComplaintTypeEntity.class)
 @Transactional(value = "txManager")
 public interface ComplaintTypeDao {
-	
+	List<ComplaintTypeEntity> findAll();	
 }
